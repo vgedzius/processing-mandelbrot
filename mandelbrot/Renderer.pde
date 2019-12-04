@@ -99,9 +99,8 @@ class Renderer {
         
         int i = x + width*y;
         pg.pixels[i] = getColor(n, a, b);
-        renderer.progress = (int) Math.round((float)current / total * 100);
+        progress = (int) Math.round((float)current / total * 100);
         current++;
-        
       }
     }
     
