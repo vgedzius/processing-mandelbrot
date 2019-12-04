@@ -11,15 +11,12 @@ void setup() {
   pixelDensity(1);
   
   renderer = new Renderer();
-  renderer.init()
-    .renderImage();
+  renderer.init();
 }
 
 void draw() {
   background(0);
-
-  renderer.renderImage()
-    .renderStats();
+  renderer.update();
 }
 
 void mousePressed() {
