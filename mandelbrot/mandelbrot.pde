@@ -22,3 +22,9 @@ void draw() {
 void mousePressed() {
   renderer.zoom(mouseX, mouseY, 3);
 }
+
+void keyPressed() {
+  if (keyCode == 83) {
+    renderer.toggleStats();
+  }
+}

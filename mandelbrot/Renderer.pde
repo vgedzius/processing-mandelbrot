@@ -10,9 +10,11 @@ class Renderer {
   float maxB;
   
   int progress = 0;
+  float zoomLevel = 1;
   
   PGraphics img;
   RendererThread thread;
+  boolean showStats = false;
   
   Renderer() {
     img = createGraphics(width, height);
@@ -35,6 +37,7 @@ class Renderer {
   
   void update() {
     renderImage();
+    renderStats();
     renderProgress(0, 0);
   }
   
@@ -48,6 +51,8 @@ class Renderer {
     float bLength = abs(maxB - minB);
     minB = mappedY - bLength / zoom;
     maxB = mappedY + bLength / zoom;
+    
+    zoomLevel += zoomLevel / zoom;
     
     run();
   }
@@ -116,6 +121,20 @@ class Renderer {
   
   void renderImage() {
     image(img, 0, 0);
+  }
+  
+  void renderStats() {
+    if (!showStats) {
+      return;
+    }
+    
+    fill(255);
+    textSize(22);
+    text("Zoom: " + round(zoomLevel * 100.0) / 100.0 + "x", 10, 30);
+  }
+  
+  void toggleStats() {
+    showStats = !showStats; 
   }
   
   color getColor(int n, double a, double b) {
