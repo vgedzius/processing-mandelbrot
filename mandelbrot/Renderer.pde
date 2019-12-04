@@ -101,13 +101,18 @@ class Renderer {
   }
   
   void renderStats() {
-    renderProgress(10, 50);
+    renderProgress(0, 0);
   }
   
   void renderProgress(int x, int y) {
-    fill(255);
-    textSize(35);
-    text(progress + "%", x, y);
+    
+    
+    
+    if (progress < 100) {
+      fill(3, 155, 229);
+      strokeWeight(0);
+      rect(x, y, width * progress / 100, 5);
+    }
   }
   
   void renderImage() {
