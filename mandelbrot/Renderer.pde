@@ -75,8 +75,8 @@ class Renderer {
     
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
-        double a = map(x - width / 8, 0, width, renderer.minA, renderer.maxA);
-        double b = map(y, 0, height, renderer.minB, renderer.maxB);
+        double a = map(x - width / 8, 0, width, minA, maxA);
+        double b = map(y, 0, height, minB, maxB);
   
         double ca = a;
         double cb = b;
