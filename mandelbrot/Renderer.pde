@@ -10,7 +10,6 @@ class Renderer {
   float maxB;
   
   int progress = 0;
-
   
   PGraphics img;
   RendererThread thread;
@@ -29,6 +28,8 @@ class Renderer {
     maxA = startMaxA;
     minB = startMinB;
     maxB = startMaxB;
+    
+    run();
   }
   
   void zoom (int x, int y, int zoom) {
@@ -99,43 +100,57 @@ class Renderer {
     img = pg;
   }
   
+  void renderStats() {
+    renderProgress(10, 50);
+  }
+  
   void renderProgress(int x, int y) {
     fill(255);
     textSize(35);
-    text(renderer.progress + "%", x, y);
+    text(progress + "%", x, y);
+  }
+  
+  void renderImage() {
+    image(img, 0, 0);
   }
   
   color getColor(int n, double a, double b) {
-  if (n == maxIterations) {
-    return color(0, 0, 0);
-  } else {
-    ArrayList<Integer> pallete = new ArrayList<Integer>();
-    pallete.add(color(60, 30, 15));
-    pallete.add(color(25, 7, 26));
-    pallete.add(color(9, 1, 47));
-    pallete.add(color(4, 4, 73));
-    pallete.add(color(0, 7, 100));
-    pallete.add(color(12, 44, 138));
-    pallete.add(color(24, 82, 177));
-    pallete.add(color(57, 125, 209));
-    pallete.add(color(134, 181, 229));
-    pallete.add(color(211, 236, 248));
-    pallete.add(color(241, 233, 191));
-    pallete.add(color(248, 201, 95));
-    pallete.add(color(255, 170, 0));
-    pallete.add(color(204, 128, 0));
-    pallete.add(color(153, 87, 0));
-    pallete.add(color(106, 52, 3));
-
-    double logZn = Math.log(a * a + b * b) / escapeRadius;
-    double nu = Math.log(logZn / Math.log(escapeRadius)) / Math.log(escapeRadius);
-    double iteration = n + 2 - nu;
-    float it = (float)iteration;
-    
-    color clr1 = pallete.get(floor(it) % pallete.size());
-    color clr2 = pallete.get((floor(it) + 1) % pallete.size());
-
-    return lerpColor(clr1, clr2, it % 1);
+    if (n == maxIterations) {
+      return color(0, 0, 0);
+    } else {
+      double logZn = Math.log(a * a + b * b) / escapeRadius;
+      double nu = Math.log(logZn / Math.log(escapeRadius)) / Math.log(escapeRadius);
+      double iteration = n + 2 - nu;
+      float it = (float)iteration;
+      
+      ArrayList<Integer> p = pallete();
+      color clr1 = p.get(floor(it) % p.size());
+      color clr2 = p.get((floor(it) + 1) % p.size());
+  
+      return lerpColor(clr1, clr2, it % 1);
+    }
   }
-}
+  
+  ArrayList<Integer> pallete() {
+    ArrayList<Integer> p = new ArrayList<Integer>();
+    
+    p.add(color(60, 30, 15));
+    p.add(color(25, 7, 26));
+    p.add(color(9, 1, 47));
+    p.add(color(4, 4, 73));
+    p.add(color(0, 7, 100));
+    p.add(color(12, 44, 138));
+    p.add(color(24, 82, 177));
+    p.add(color(57, 125, 209));
+    p.add(color(134, 181, 229));
+    p.add(color(211, 236, 248));
+    p.add(color(241, 233, 191));
+    p.add(color(248, 201, 95));
+    p.add(color(255, 170, 0));
+    p.add(color(204, 128, 0));
+    p.add(color(153, 87, 0));
+    p.add(color(106, 52, 3));
+      
+    return p;
+  }
 }

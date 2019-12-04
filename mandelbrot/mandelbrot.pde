@@ -5,23 +5,21 @@ float potential = 8;
 Renderer renderer;
 
 void setup() {
-  pixelDensity(1);
   //fullScreen();
-  background(0);
   size(800, 600);
+  background(0);
+  pixelDensity(1);
   
   renderer = new Renderer();
-  
   renderer.init();
-  renderer.run();
-  image(renderer.img, 0, 0);
+  renderer.renderImage();
 }
 
 void draw() {
   background(0);
 
-  image(renderer.img, 0, 0);
-  renderer.renderProgress(10, 50);
+  renderer.renderImage();
+  renderer.renderStats();
 }
 
 void mousePressed() {
