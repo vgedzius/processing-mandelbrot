@@ -18,7 +18,7 @@ class Renderer {
     img = createGraphics(width, height);
   }
   
-  void init() {
+  Renderer init() {
     startMinA = -2;
     startMaxA = 2;
     startMinB = (height * startMinA) / width;
@@ -30,9 +30,10 @@ class Renderer {
     maxB = startMaxB;
     
     run();
+    return this;
   }
   
-  void zoom (int x, int y, int zoom) {
+  Renderer zoom (int x, int y, int zoom) {
     float mappedX = map(x, 0, width, minA, maxA);
     float aLength = abs(maxA - minA);
     minA = mappedX - aLength / zoom;
@@ -44,18 +45,21 @@ class Renderer {
     maxB = mappedY + bLength / zoom;
     
     run();
+    return this;
   }
   
-  void zoom (int x, int y) {
+  Renderer zoom (int x, int y) {
     zoom(x, y, 4);
+    return this;
   }
 
-  void run() {
+  Renderer run() {
     thread = new RendererThread(this);
     thread.start();
+    return this;
   }
   
-  void render () {
+  Renderer render () {
     PGraphics pg = createGraphics(width, height);
     pg.beginDraw();
     pg.loadPixels();
@@ -98,25 +102,27 @@ class Renderer {
     pg.endDraw();
     
     img = pg;
+    return this;
   }
   
-  void renderStats() {
+  Renderer renderStats() {
     renderProgress(0, 0);
+    return this;
   }
   
-  void renderProgress(int x, int y) {
-    
-    
-    
+  Renderer renderProgress(int x, int y) {
     if (progress < 100) {
       fill(3, 155, 229);
       strokeWeight(0);
       rect(x, y, width * progress / 100, 5);
     }
+    
+    return this;
   }
   
-  void renderImage() {
+  Renderer renderImage() {
     image(img, 0, 0);
+    return this;
   }
   
   color getColor(int n, double a, double b) {
