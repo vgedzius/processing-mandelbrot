@@ -73,6 +73,7 @@ class Renderer {
     int total = width * height;
     int current = 1;
     
+    double max = 0;
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
         double a = map(x - width / 8, 0, width, minA, maxA);
@@ -81,28 +82,45 @@ class Renderer {
         double ca = a;
         double cb = b;
   
-        int n = 0;
+        color c = color(0);
+        int pow = 1;
   
-        while (n < maxIterations) {
+        
+        for (int n = 0; n < maxIterations; n++) {
+          
+    
+          double r2 = a * a + b * b;
+
+          if (r2 > 1000000) {
+            
+            double v = Math.log(r2)/pow;
+            
+            if (v > max) {
+              max = v;
+            }
+            c = getColor(v, a, b);
+            
+            break;
+          }
+          
           double aa = a * a - b * b;
           double bb = 2 * a * b;
   
           a = aa + ca;
           b = bb + cb;
-  
-          if (a * a + b * b > potential) {
-            break;
-          }
-  
-          n++;
+          
+          pow = pow * 2;
         }
         
-        int i = x + width*y;
-        pg.pixels[i] = getColor(n, a, b);
+        int i = x + width * y;
+        pg.pixels[i] = c;
+        
         progress = (int) Math.round((float)current / total * 100);
         current++;
       }
     }
+    
+    println(max);
     
     pg.updatePixels();
     pg.endDraw();
@@ -136,21 +154,18 @@ class Renderer {
     showStats = !showStats; 
   }
   
-  color getColor(int n, double a, double b) {
-    if (n == maxIterations) {
-      return color(0, 0, 0);
-    } else {
-      double logZn = Math.log(a * a + b * b) / escapeRadius;
-      double nu = Math.log(logZn / Math.log(escapeRadius)) / Math.log(escapeRadius);
-      double iteration = n + 2 - nu;
-      float it = (float)iteration;
-      
-      ArrayList<Integer> p = pallete();
-      color clr1 = p.get(floor(it) % p.size());
-      color clr2 = p.get((floor(it) + 1) % p.size());
   
-      return lerpColor(clr1, clr2, it % 1);
-    }
+  color getColor(double n, double a, double b) {
+    double logZn = Math.log(a * a + b * b) / escapeRadius;
+    double nu = Math.log(logZn / Math.log(escapeRadius)) / Math.log(escapeRadius);
+    double iteration = n + 2 - nu;
+    float it = (float)Math.abs(iteration);
+    
+    ArrayList<Integer> p = pallete();
+    color clr1 = p.get(floor(it) % p.size());
+    color clr2 = p.get((floor(it) + 1) % p.size());
+
+    return lerpColor(clr1, clr2, it % 1);
   }
   
   ArrayList<Integer> pallete() {
